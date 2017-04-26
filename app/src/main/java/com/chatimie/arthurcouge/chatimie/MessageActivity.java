@@ -141,32 +141,34 @@ public class MessageActivity extends AppCompatActivity implements MessageAdapter
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.menu_clear_sp){
-            //getSp().edit().clear().apply();
-            //messageAdapter.clearListe();
-        }
-        else if(item.getItemId() == R.id.changer_pseudo){
-            AlertDialog.Builder builder = new AlertDialog.Builder(MessageActivity.this,R.style.Theme_AppCompat_Light_Dialog);
+        switch(item.getItemId()){
+            case R.id.menu_clear_sp:
+                ContentResolver contentResolver = getContentResolver();
+                contentResolver.delete(Uri.parse(PostContentProviderContract.BASE_CONTENT_URI + "/" +
+                        PostContentProviderContract.PATH_POST), null,null);
+                break;
+            case R.id.changer_pseudo:
+                AlertDialog.Builder builder = new AlertDialog.Builder(MessageActivity.this,R.style.Theme_AppCompat_Light_Dialog);
 
-            // Get the layout inflater
-            LayoutInflater inflater = getLayoutInflater();
+                LayoutInflater inflater = getLayoutInflater();
 
-            // Inflate and set the layout for the dialog
-            // Pass null as the parent view because its going in the dialog layout
-            builder.setView(inflater.inflate(R.layout.dialog_change_pseudo, null))
-                    // Add action buttons
-                    .setPositiveButton("C'est pas faux", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            // sign in the user ...
-                        }
-                    })
-                    .setNegativeButton("No !", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                builder.setView(inflater.inflate(R.layout.dialog_change_pseudo, null))
+                        // Add action buttons
+                        .setPositiveButton("C'est pas faux", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                // sign in the user ...
+                            }
+                        })
+                        .setNegativeButton("No !", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
 
-                        }
-                    });
-            builder.show();
+                            }
+                        });
+                builder.show();
+                break;
+            default:
+                break;
         }
         return true;
     }

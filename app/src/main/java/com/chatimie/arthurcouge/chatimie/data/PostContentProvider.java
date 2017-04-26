@@ -130,6 +130,9 @@ public class PostContentProvider extends ContentProvider {
                 String id = uri.getPathSegments().get(1);
                 tasksDeleted = db.delete(TABLE_NAME, "_id=?", new String[]{id});
                 break;
+            case POST:
+                tasksDeleted = db.delete(TABLE_NAME,null,null);
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

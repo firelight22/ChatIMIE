@@ -44,6 +44,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageH
                         )));
 
             }
+            cursor = null;
         }
     }
 
