@@ -3,6 +3,7 @@
     package="com.chatimie.arthurcouge.chatimie">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <!--<uses-permission android:name="android.permission.WRITE_CONTACTS"/>-->
     <!--<uses-permission android:name="com.chatimie.arthurcouge.messagesapp.MESSAGES_READ"/>-->
@@ -36,7 +37,12 @@
         <activity
             android:name=".MessageActivity"
             android:label="@string/title_activity_message"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED"/>
+                <action android:name="android.net.wifi.STATE_CHANGE"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

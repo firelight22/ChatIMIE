@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -13,16 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.chatimie.arthurcouge.chatimie.data.PostContentProviderContract.TaskEntry;
 import com.chatimie.arthurcouge.chatimie.data.PostContentProviderContract;
-import com.chatimie.arthurcouge.chatimie.data.PostsBDDContract;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageHolder> {
     private ArrayList<Message> listMessage = new ArrayList<>();
     private Cursor cursor;
-    private SQLiteDatabase mDb;
     private Context context;
 
     public interface ListItemClickListener {
@@ -33,36 +30,28 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageH
 
     public MessageAdapter(ListItemClickListener listener, @Nullable Cursor cursor, Context context) {
         messageOnClickListener = listener;
-        mDb = MessageActivity.getmDb();
         this.context = context;
         if (cursor != null) {
             this.cursor = cursor;
             while (cursor.moveToNext()){
-                addToListe(new Message(cursor.getString(cursor.getColumnIndex(PostsBDDContract.PostsEntry.COLUMN_MESSAGE_NAME)),
-                        cursor.getString(cursor.getColumnIndex(PostsBDDContract.PostsEntry.COLUMN_PSEUDO_NAME)),
-                        cursor.getString(cursor.getColumnIndex(PostsBDDContract.PostsEntry.COLUMN_DATE_NAME)
+                addToListe(new Message(cursor.getString(cursor.getColumnIndex(TaskEntry.COLUMN_MESSAGE)),
+                        cursor.getString(cursor.getColumnIndex(TaskEntry.COLUMN_PSEUDO)),
+                        cursor.getString(cursor.getColumnIndex(TaskEntry.COLUMN_DATE)
                         )));
-
             }
             cursor = null;
         }
     }
 
-
     @Override
     public void onBindViewHolder(MessageHolder holder, int position) {
         Message message = listMessage.get(position);
-        if (cursor!=null && cursor.moveToPosition(position)){
-            holder.bind(cursor.getString(cursor.getColumnIndex(PostsBDDContract.PostsEntry.COLUMN_MESSAGE_NAME)),
-                    cursor.getString(cursor.getColumnIndex(PostsBDDContract.PostsEntry.COLUMN_PSEUDO_NAME)),
-                    cursor.getString(cursor.getColumnIndex(PostsBDDContract.PostsEntry.COLUMN_DATE_NAME)));
-        }else{
-            holder.bind(
-                    message.getMessage(),
-                    message.getPseudo(),
-                    message.getHour()
-            );
-        }
+        holder.bind(
+                message.getMessage(),
+                message.getPseudo(),
+                message.getHour()
+        );
+        //}
     }
 
     @Override
@@ -90,21 +79,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageH
         //TODO Ajouter post SQLite
         addPost(message.getHour(),message.getMessage(),message.getPseudo());
 
-
-        //SharedPreferences sp = MessageActivity.getSp();
-        //sp.edit().putString(String.valueOf(sp.getAll().size()),
-        //        message.getMessage()+";" +
-        //        message.getHour()+ ";"+
-        //        message.getPseudo()
-        //).apply();
-
         return listMessage.indexOf(message);
     }
 
-    public void clearListe(){
-        listMessage.clear();
-        notifyDataSetChanged();
-    }
 
     class MessageHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView itemMessage;
@@ -132,16 +109,25 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageH
             Message message = listMessage.get(clickedPosition);
             messageOnClickListener.onListItemClick(message, view);
         }
-
     }
     private void addPost(String date,String message,String pseudo){
         ContentResolver contentResolver =  context.getContentResolver();
         ContentValues cv = new ContentValues();
-        cv.put(PostsBDDContract.PostsEntry.COLUMN_DATE_NAME,date);
-        cv.put(PostsBDDContract.PostsEntry.COLUMN_MESSAGE_NAME,message);
-        cv.put(PostsBDDContract.PostsEntry.COLUMN_PSEUDO_NAME,pseudo);
+        cv.put(TaskEntry.COLUMN_DATE,date);
+        cv.put(TaskEntry.COLUMN_MESSAGE,message);
+        cv.put(TaskEntry.COLUMN_PSEUDO,pseudo);
 
         contentResolver.insert(Uri.parse(PostContentProviderContract.BASE_CONTENT_URI + "/" +
                 PostContentProviderContract.PATH_POST),cv);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 }

@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -31,6 +32,7 @@ import com.chatimie.arthurcouge.chatimie.bg.NotifUtils;
 import com.chatimie.arthurcouge.chatimie.data.PostContentProviderContract;
 import com.chatimie.arthurcouge.chatimie.data.PostsBDDContract;
 import com.chatimie.arthurcouge.chatimie.data.PostsBDDHelper;
+import com.chatimie.arthurcouge.chatimie.receivers.ReceiverWifi;
 
 import java.util.Date;
 
@@ -70,7 +72,10 @@ public class MessageActivity extends AppCompatActivity implements MessageAdapter
         messageAdapter.notifyDataSetChanged();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         // add send message here
-
+        final IntentFilter filters = new IntentFilter();
+        filters.addAction("android.net.wifi.WIFI_STATE_CHANGED");
+        filters.addAction("android.net.wifi.STATE_CHANGE");
+        super.registerReceiver(new ReceiverWifi(), filters);
         NotifUtils.notify(getBaseContext());
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

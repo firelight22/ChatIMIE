@@ -48,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Sans cette ligne l'application crash au démarrage
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        
 
        /* textViewId = (TextView) findViewById(R.id.textViewId);
         textViewBody = (TextView) findViewById(R.id.textViewBody);
