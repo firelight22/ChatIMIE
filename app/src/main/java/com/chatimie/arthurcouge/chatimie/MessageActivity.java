@@ -27,6 +27,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.chatimie.arthurcouge.chatimie.bg.MyIntentService;
+import com.chatimie.arthurcouge.chatimie.bg.NotifUtils;
 import com.chatimie.arthurcouge.chatimie.data.PostContentProviderContract;
 import com.chatimie.arthurcouge.chatimie.data.PostsBDDContract;
 import com.chatimie.arthurcouge.chatimie.data.PostsBDDHelper;
@@ -69,6 +70,8 @@ public class MessageActivity extends AppCompatActivity implements MessageAdapter
         messageAdapter.notifyDataSetChanged();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         // add send message here
+
+        NotifUtils.notify(getBaseContext());
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

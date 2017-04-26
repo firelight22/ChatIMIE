@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
         Button buttonEnter = (Button) findViewById(R.id.buttonEnter);
+
         buttonEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
